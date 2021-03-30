@@ -1,0 +1,56 @@
+# Required software packages for macOS before using this script
+in the terminal:
+
+1. Command Line Tools
+Type the following below command to install command line developer tools package:
+xcode-select --install
+
+2. Homebrew
+For MacOS Catalina, macOS Mojave, and MacOS Big Sur enter this into terminal:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+For macOS High Sierra, Sierra, El Capitan, and earlier enter this into terminal:
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+3. JDK (JAVA Development Kit) 
+in the terminal:
+brew cask install java
+
+ 
+4. WGET
+in the terminal:
+brew install wget
+
+
+
+
+# WRF-4.2.2-install-script
+This is a script that installs all the libararies, software, programs, and geostatic data to run the Weather Research Forecast Model (WRF-4.2.2) with the option to run 3DVAR & 4DVAR observational data. 
+
+# Installation 
+(Make sure to download folder into your Home Directory):
+
+git clone https://github.com/whatheway/WRF-4.2.2-install-script.git
+
+chmod +x WRF_ARW_INSTALL.sh
+
+./WRF_ARW_INSTALL
+
+# Please make sure to read the WRF_ARW_INSTALL.sh script before installing.  
+I have provided comments on what the script is doing and information on configuration files.
+
+
+# WRF installation with parallel process.
+
+Download and install required library and data files for WRF.
+
+Tested in macOS High Sierra 10.13.6
+
+Built in 32-bit
+
+Tested with current available libraries on 03/15/2021
+
+If newer libraries exist edit script paths for changes
+
+# Estimated Run Time ~ 80 - 120 Minutes
+### Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
