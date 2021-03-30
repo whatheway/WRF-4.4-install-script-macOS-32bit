@@ -2,23 +2,32 @@
 in the terminal:
 
 1. Command Line Tools
+
 Type the following below command to install command line developer tools package:
+
 xcode-select --install
 
 2. Homebrew
+
 For MacOS Catalina, macOS Mojave, and MacOS Big Sur enter this into terminal:
+
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 For macOS High Sierra, Sierra, El Capitan, and earlier enter this into terminal:
+
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 3. JDK (JAVA Development Kit) 
+
 in the terminal:
+
 brew cask install java
 
  
 4. WGET
+
 in the terminal:
+
 brew install wget
 
 
