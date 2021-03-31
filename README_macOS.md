@@ -21,11 +21,11 @@ xcode-select --install
  
  
  
-3. JDK (JAVA Development Kit) 
+3. APT
 
 #### in the terminal:
 
-brew install java
+brew install apt
 
   
   
