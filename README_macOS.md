@@ -21,24 +21,6 @@ xcode-select --install
  
  
  
-3. APT
-
-#### in the terminal:
-
-brew install apt
-
-  
-  
-  
-4. WGET
-
-#### in the terminal:
-
-brew install wget
-
- 
- 
- 
  
 
 # WRF-4.2.2-install-script
