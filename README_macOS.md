@@ -25,7 +25,7 @@ xcode-select --install
 
 #### in the terminal:
 
-brew cask install java
+brew install java
 
   
   
