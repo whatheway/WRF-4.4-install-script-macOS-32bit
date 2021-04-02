@@ -20,6 +20,9 @@ xcode-select --install
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
  
  
+3. Basic Package Management
+                                                                                               
+brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads  
  
  
 
