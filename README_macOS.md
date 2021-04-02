@@ -43,7 +43,7 @@ I have provided comments on what the script is doing and information on configur
 
 Download and install required library and data files for WRF.
 
-Tested in macOS High Sierra 10.13.6
+Tested in macOS Catalina 10.15.7
 
 Built in 32-bit
 
