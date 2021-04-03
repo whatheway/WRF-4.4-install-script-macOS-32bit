@@ -39,7 +39,7 @@ chmod +x Install_MAC_WRF.sh
 
 ./Install_MAC_WRF.sh
 
-# Please make sure to read the WRF_ARW_INSTALL.sh script before installing.  
+# Please make sure to read the Install_MAC_WRF.sh script before installing.  
 I have provided comments on what the script is doing and information on configuration files.
 
 
@@ -56,4 +56,4 @@ Tested with current available libraries on 03/15/2021
 If newer libraries exist edit script paths for changes
 
 # Estimated Run Time ~ 80 - 120 Minutes
-### Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
+### Special thanks to  Youtube's meteoadriatic and GitHub user jamal919 and Gordon S.
