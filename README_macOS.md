@@ -25,6 +25,7 @@ xcode-select --install
 brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads  
 
 4. Change default shell from zsh to bash
+5. 
 chsh -s /bin/bash
  
  
