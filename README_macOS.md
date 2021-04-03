@@ -25,7 +25,7 @@ xcode-select --install
 brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads  
 
 4. Change default shell from zsh to bash
-5. 
+
 chsh -s /bin/bash
  
  
@@ -38,9 +38,9 @@ This is a script that installs all the libararies, software, programs, and geost
 
 git clone https://github.com/whatheway/WRF-4.2.2-install-script-macOS-32bit.git
 
-chmod +x WRF_ARW_INSTALL.sh
+chmod +x Install_MAC_WRF.sh
 
-./WRF_ARW_INSTALL
+./Install_MAC_WRF.sh
 
 # Please make sure to read the WRF_ARW_INSTALL.sh script before installing.  
 I have provided comments on what the script is doing and information on configuration files.
