@@ -10,9 +10,9 @@
 #Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
 
 #############################basic package managment############################
-
-
-brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads
+brew update
+brew upgrade
+brew install gcc@9 libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads
 
 ##############################Directory Listing############################
 
