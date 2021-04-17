@@ -12,7 +12,7 @@
 #############################basic package managment############################
 brew update
 brew upgrade
-brew install gcc@9 libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads
+brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads
 
 ##############################Directory Listing############################
 
@@ -25,7 +25,7 @@ mkdir WRFDA
 mkdir Libs
 mkdir Libs/grib2
 mkdir Libs/NETCDF
-mkdir Libs/MPICH
+
 
 ##############################Downloading Libraries############################
 
@@ -55,6 +55,7 @@ tar -xvzf zlib-1.2.11.tar.gz
 cd zlib-1.2.11/
 ./configure --prefix=$DIR/grib2
 make
+
 make install
 
 
@@ -135,7 +136,7 @@ tar -xvzf v4.2.2.tar.gz -C $HOME/WRF
 cd $HOME/WRF/WRF-4.2.2
 ./clean
 ./configure
-./compile em_real
+./compile em_real >& log_compile 2>& error_log
 
 export WRF_DIR=$HOME/WRF/WRF-4.2.2
 
