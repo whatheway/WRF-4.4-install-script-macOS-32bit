@@ -10,8 +10,8 @@
 #Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
 
 #############################basic package managment############################
-brew update
-brew upgrade
+
+
 brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads
 
 ##############################Directory Listing############################
@@ -55,7 +55,6 @@ tar -xvzf zlib-1.2.11.tar.gz
 cd zlib-1.2.11/
 ./configure --prefix=$DIR/grib2
 make
-
 make install
 
 
@@ -126,7 +125,7 @@ make install
 ############################ WRF 4.2.2 #################################
 ## WRF v4.2.2
 ## Downloaded from git tagged releases
-# option 17, option 1 for gfortran and distributed memory w/basic nesting
+# option 21, option 1 for gfortran/clang and distributed memory w/basic nesting
 ########################################################################
 
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
@@ -136,7 +135,7 @@ tar -xvzf v4.2.2.tar.gz -C $HOME/WRF
 cd $HOME/WRF/WRF-4.2.2
 ./clean
 ./configure
-./compile em_real >& log_compile 2>& error_log
+./compile em_real
 
 export WRF_DIR=$HOME/WRF/WRF-4.2.2
 
@@ -145,7 +144,7 @@ export WRF_DIR=$HOME/WRF/WRF-4.2.2
 ############################WPSV4.2#####################################
 ## WPS v4.2
 ## Downloaded from git tagged releases
-#Option 19 for gfortran and distributed memory
+#Option 23 for gfortran/clang and distributed memory
 ########################################################################
 
 cd $HOME/WRF/Downloads
@@ -164,7 +163,7 @@ cd $HOME/WRF/WPS-4.2
 ## WRFPLUS is built within the WRF git folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
 ##Note: if you intend to run both 3DVAR and 4DVAR experiments, it is not necessary to compile the code twice.
-#Option 10 for gfortran/gcc and distribunted memory
+#Option 12 for gfortran/clang and distribunted memory
 ########################################################################
 
 cd $HOME/WRF/Downloads
@@ -189,7 +188,7 @@ export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 ## WRFDA is built within the WRFPLUS folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
 ##Note: if you intend to run both 3DVAR and 4DVAR experiments, it is not necessary to compile the code twice.
-#Option 10 for gfortran/gcc and distribunted memory
+#Option 12 for gfortran/clang and distribunted memory
 ########################################################################
 
 cd $HOME/WRF/Downloads
@@ -202,7 +201,7 @@ export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
 export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
-./configure 4dvar #Option 18 for gfortran/gcc and distribunted memory
+./configure 4dvar 
 ./compile all_wrfvar
 
 
