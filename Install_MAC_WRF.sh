@@ -4,7 +4,7 @@
 # Download and install required library and data files for WRF.
 # Tested in macOS Catalina 10.15.7
 # Tested in 32-bit
-# Tested with current available libraries on 03/15/2021
+# Tested with current available libraries on 05/25/2021
 # If newer libraries exist edit script paths for changes
 #Estimated Run Time ~ 80 - 120 Minutes
 #Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
@@ -122,35 +122,35 @@ make install
 
 
 
-############################ WRF 4.2.2 #################################
-## WRF v4.2.2
+############################ WRF 4.3 #################################
+## WRF v4.3
 ## Downloaded from git tagged releases
 # option 21, option 1 for gfortran/clang and distributed memory w/basic nesting
 ########################################################################
 
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 cd $HOME/WRF/Downloads
-wget -c https://github.com/wrf-model/WRF/archive/v4.2.2.tar.gz
-tar -xvzf v4.2.2.tar.gz -C $HOME/WRF
-cd $HOME/WRF/WRF-4.2.2
+wget -c https://github.com/wrf-model/WRF/archive/v4.3.tar.gz
+tar -xvzf v4.3.tar.gz -C $HOME/WRF
+cd $HOME/WRF/WRF-4.3
 ./clean
 ./configure
 ./compile em_real
 
-export WRF_DIR=$HOME/WRF/WRF-4.2.2
+export WRF_DIR=$HOME/WRF/WRF-4.3
 
 
 
-############################WPSV4.2#####################################
-## WPS v4.2
+############################WPSV4.3#####################################
+## WPS v4.3
 ## Downloaded from git tagged releases
 #Option 23 for gfortran/clang and distributed memory
 ########################################################################
 
 cd $HOME/WRF/Downloads
-wget -c https://github.com/wrf-model/WPS/archive/v4.2.tar.gz
-tar -xvzf v4.2.tar.gz -C $HOME/WRF
-cd $HOME/WRF/WPS-4.2
+wget -c https://github.com/wrf-model/WPS/archive/v4.3.tar.gz
+tar -xvzf v4.3.tar.gz -C $HOME/WRF
+cd $HOME/WRF/WPS-4.3
 ./configure
 ./compile
 
@@ -158,7 +158,7 @@ cd $HOME/WRF/WPS-4.2
 
 
 ############################WRFPLUS 4DVAR###############################
-## WRFPLUS v4.2 4DVAR
+## WRFPLUS v4.3 4DVAR
 ## Downloaded from git tagged releases
 ## WRFPLUS is built within the WRF git folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
@@ -167,11 +167,11 @@ cd $HOME/WRF/WPS-4.2
 ########################################################################
 
 cd $HOME/WRF/Downloads
-tar -xvzf v4.2.2.tar.gz -C $HOME/WRF/WRFPLUS
-cd $HOME/WRF/WRFPLUS/WRF-4.2.2
+tar -xvzf v4.3.tar.gz -C $HOME/WRF/WRFPLUS
+cd $HOME/WRF/WRFPLUS/WRF-4.3
 mv * $HOME/WRF/WRFPLUS
 cd $HOME/WRF/WRFPLUS
-rm -r WRF-4.2.2/
+rm -r WRF-4.3
 export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
@@ -183,7 +183,7 @@ export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 
 
 ############################WRFDA 4DVAR###############################
-## WRFDA v4.2 4DVAR
+## WRFDA v4.3 4DVAR
 ## Downloaded from git tagged releases
 ## WRFDA is built within the WRFPLUS folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
@@ -192,11 +192,11 @@ export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 ########################################################################
 
 cd $HOME/WRF/Downloads
-tar -xvzf v4.2.2.tar.gz -C $HOME/WRF/WRFDA
-cd $HOME/WRF/WRFDA/WRF-4.2.2
+tar -xvzf v4.3.tar.gz -C $HOME/WRF/WRFDA
+cd $HOME/WRF/WRFDA/WRF-4.3
 mv * $HOME/WRF/WRFDA
 cd $HOME/WRF/WRFDA
-rm -r WRF-4.2.2/
+rm -r WRF-4.3/
 export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
@@ -258,5 +258,5 @@ echo "export LD_LIBRARY_PATH=$DIR/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
 
 
 #####################################BASH Script Finished##############################
-echo "Congratulations! You've successfully installed all required files to run the Weather Research Forecast Model verison 4.2.2."
+echo "Congratulations! You've successfully installed all required files to run the Weather Research Forecast Model verison 4.3."
 echo "Thank you for using this script"
