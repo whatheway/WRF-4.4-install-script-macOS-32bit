@@ -27,13 +27,14 @@ chsh -s /bin/bash
  
  
 
-# WRF-4.2.2-install-script
-This is a script that installs all the libararies, software, programs, and geostatic data to run the Weather Research Forecast Model (WRF-4.2.2) with the option to run 3DVAR & 4DVAR observational data. Script assumes a clean directory with no other WRF configure files in the directory.
+# WRF-4.3-install-script
+This is a script that installs all the libararies, software, programs, and geostatic data to run the Weather Research Forecast Model (WRF-4.3) with KPP. Script assumes a clean directory with no other WRF configure files in the directory.
 
 # Installation 
+## Must be installed with GNU compiler, it will not work with other compilers.
 (Make sure to download folder into your Home Directory):
 
-git clone https://github.com/whatheway/WRF-4.2.2-install-script-macOS-32bit.git
+git clone https://github.com/whatheway/WRF-4.3-install-script-macOS-32bit.git
 
 chmod +x Install_MAC_WRF.sh
 
@@ -51,7 +52,7 @@ Tested in macOS Catalina 10.15.7
 
 Built in 32-bit
 
-Tested with current available libraries on 03/15/2021
+Tested with current available libraries on 05/25/2021
 
 If newer libraries exist edit script paths for changes
 
