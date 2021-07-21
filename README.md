@@ -5,7 +5,7 @@ in the terminal:
 
 Type the following below command to install command line developer tools package:
 
-xcode-select --install
+> xcode-select --install
  
  
  
@@ -13,17 +13,17 @@ xcode-select --install
 
 #### For MacOS Catalina, macOS Mojave, and MacOS Big Sur enter this into terminal:
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 #### For macOS High Sierra, Sierra, El Capitan, and earlier enter this into terminal:
 
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+> /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
  
  
 
 3. Change default shell from zsh to bash
 
-chsh -s /bin/bash
+> chsh -s /bin/bash
  
  
 
@@ -34,11 +34,11 @@ This is a script that installs all the libararies, software, programs, and geost
 ## Must be installed with GNU compiler, it will not work with other compilers.
 (Make sure to download folder into your Home Directory):
 
-git clone https://github.com/whatheway/WRF-4.3-install-script-macOS-32bit.git
+> git clone https://github.com/whatheway/WRF-4.3-install-script-macOS-32bit.git
 
-chmod +x Install_MAC_WRF.sh
+> chmod +x Install_MAC_WRF.sh
 
-./Install_MAC_WRF.sh
+> ./Install_MAC_WRF.sh
 
 # Please make sure to read the Install_MAC_WRF.sh script before installing.  
 I have provided comments on what the script is doing and information on configuration files.
