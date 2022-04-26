@@ -4,9 +4,9 @@
 # Download and install required library and data files for WRF.
 # Tested in macOS Catalina 10.15.7
 # Tested in 32-bit
-# Tested with current available libraries on 05/25/2021
+# Tested with current available libraries on 04/25/2022
 # If newer libraries exist edit script paths for changes
-#Estimated Run Time ~ 80 - 120 Minutes with 10mb/s downloadspeed.
+#Estimated Run Time ~ 80 - 150 Minutes with 10mb/s downloadspeed.
 #Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
 
 #############################basic package managment############################
@@ -31,9 +31,9 @@ mkdir Libs/NETCDF
 
 cd Downloads
 wget -c https://github.com/madler/zlib/archive/refs/tags/v1.2.11.tar.gz
-wget -c https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.gz
-wget -c https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz
-wget -c https://github.com/Unidata/netcdf-fortran/archive/refs/tags/v4.5.3.tar.gz
+wget -c https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_13_1.tar.gz
+wget -c https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.8.1.tar.gz
+wget -c https://github.com/Unidata/netcdf-fortran/archive/refs/tags/v4.5.4.tar.gz
 wget -c https://download.sourceforge.net/libpng/libpng-1.6.37.tar.gz
 wget -c https://www.ece.uvic.ca/~frodo/jasper/software/jasper-1.900.1.zip
 
@@ -49,18 +49,18 @@ export FC=gfortran
 export F77=gfortran
 
 #############################zlib############################
-
+##### Utilizing Zlib 1.2.11 instead of Zlib 1.2.12  #########
+##### due to bugs in new zlib package that needs to #########
+##### be fixed.  Will update once patched           #########
 cd $HOME/WRF/Downloads
 tar -xvzf v1.2.11.tar.gz
 cd zlib-1.2.11/
 ./configure --prefix=$DIR/grib2
 make
 make install
-
-
+make check
 
 #############################libpng############################
-
 cd $HOME/WRF/Downloads
 export LDFLAGS=-L$DIR/grib2/lib
 export CPPFLAGS=-I$DIR/grib2/include
@@ -69,6 +69,8 @@ cd libpng-1.6.37/
 ./configure --prefix=$DIR/grib2
 make
 make install
+make check
+
 
 #############################JasPer############################
 
@@ -86,25 +88,26 @@ export JASPERINC=$DIR/grib2/include
 #############################hdf5 library for netcdf4 functionality############################
 
 cd $HOME/WRF/Downloads
-tar -xvzf hdf5-1.12.0.tar.gz
-cd hdf5-1.12.0
+tar -xvzf hdf5-1_13_1.tar.gz
+cd hdf5-hdf5-1_13_1
 ./configure --prefix=$DIR/grib2 --with-zlib=$DIR/grib2 --enable-hl --enable-fortran
-make
+make 
 make install
+make check
 
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
 
 ##############################Install NETCDF C Library############################
-
 cd $HOME/WRF/Downloads
-tar -xzvf netcdf-c-4.7.4.tar.gz
-cd netcdf-c-4.7.4/
-export CPPFLAGS=-I$DIR/grib2/include
+tar -xzvf v4.8.1.tar.gz
+cd netcdf-c-4.8.1/
+export CPPFLAGS=-I$DIR/grib2/include 
 export LDFLAGS=-L$DIR/grib2/lib
 ./configure --prefix=$DIR/NETCDF --disable-dap
-make
+make 
 make install
+make check
 
 export PATH=$DIR/NETCDF/bin:$PATH
 export NETCDF=$DIR/NETCDF
@@ -112,54 +115,50 @@ export NETCDF=$DIR/NETCDF
 ##############################NetCDF fortran library############################
 
 cd $HOME/WRF/Downloads
-tar -xvzf netcdf-fortran-4.5.3.tar.gz
-cd netcdf-fortran-4.5.3/
+tar -xvzf v4.5.4.tar.gz
+cd netcdf-fortran-4.5.4/
 export LD_LIBRARY_PATH=$DIR/NETCDF/lib:$LD_LIBRARY_PATH
-export CPPFLAGS=-I$DIR/NETCDF/include
+export CPPFLAGS=-I$DIR/NETCDF/include 
 export LDFLAGS=-L$DIR/NETCDF/lib
 ./configure --prefix=$DIR/NETCDF --disable-shared
-make
+make 
 make install
+make check
 
-
-
-############################ WRF 4.3 #################################
-## WRF v4.3
+############################ WRF 4.3.3 #################################
+## WRF v4.3.3
 ## Downloaded from git tagged releases
 # option 21, option 1 for gfortran/clang and distributed memory w/basic nesting
 ########################################################################
 
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 cd $HOME/WRF/Downloads
-wget -c https://github.com/wrf-model/WRF/archive/v4.3.tar.gz -O WRF-4.3.tar.gz
-tar -xvzf WRF-4.3.tar.gz -C $HOME/WRF
-cd $HOME/WRF/WRF-4.3
+wget -c https://github.com/wrf-model/WRF/archive/v4.3.3.tar.gz -O WRF-4.3.3.tar.gz
+tar -xvzf WRF-4.3.3.tar.gz -C $HOME/WRF
+cd $HOME/WRF/WRF-4.3.3
 ./clean
-./configure
+./configure # option 21, option 1 for gfortran/clang and distributed memory w/basic nesting
 ./compile em_real
 
-export WRF_DIR=$HOME/WRF/WRF-4.3
+export WRF_DIR=$HOME/WRF/WRF-4.3.3
+
 
 ############################WPSV4.3#####################################
-## WPS v4.3
+## WPS v4.3.1
 ## Downloaded from git tagged releases
 #Option 3 for gfortran and distributed memory 
 ########################################################################
 
 cd $HOME/WRF/Downloads
-wget -c https://github.com/wrf-model/WPS/archive/v4.3.tar.gz -O WPS-4.3.tar.gz
-tar -xvzf WPS-4.3.tar.gz -C $HOME/WRF
-cd $HOME/WRF/WPS-4.3
+wget -c https://github.com/wrf-model/WPS/archive/refs/tags/v4.3.1.tar.gz -O WPS-4.3.1.tar.gz
+tar -xvzf WPS-4.3.1.tar.gz -C $HOME/WRF
+cd $HOME/WRF/WPS-4.3.1
 ./configure #Option 3 for gfortran and distributed memory 
 ./compile
 
 
-
-
-
-
 ############################WRFPLUS 4DVAR###############################
-## WRFPLUS v4.3 4DVAR
+## WRFPLUS v4.3.3 4DVAR
 ## Downloaded from git tagged releases
 ## WRFPLUS is built within the WRF git folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
@@ -168,23 +167,23 @@ cd $HOME/WRF/WPS-4.3
 ########################################################################
 
 cd $HOME/WRF/Downloads
-tar -xvzf WRF-4.3.tar.gz -C $HOME/WRF/WRFPLUS
-cd $HOME/WRF/WRFPLUS/WRF-4.3
+tar -xvzf WRF-4.3.3.tar.gz -C $HOME/WRF/WRFPLUS
+cd $HOME/WRF/WRFPLUS/WRF-4.3.3
 mv * $HOME/WRF/WRFPLUS
 cd $HOME/WRF/WRFPLUS
-rm -r WRF-4.3
+rm -r WRF-4.3.3/
 export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
-./configure wrfplus
-./compile wrfplus
+./configure wrfplus  #Option 12 for gfortran/gcc and distribunted memory 
+./compile wrfplus   
 export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 
 
 
 
 ############################WRFDA 4DVAR###############################
-## WRFDA v4.3 4DVAR
+## WRFDA v4.3.3 4DVAR
 ## Downloaded from git tagged releases
 ## WRFDA is built within the WRFPLUS folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
@@ -193,19 +192,17 @@ export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 ########################################################################
 
 cd $HOME/WRF/Downloads
-tar -xvzf WRF-4.3.tar.gz -C $HOME/WRF/WRFDA
-cd $HOME/WRF/WRFDA/WRF-4.3
+tar -xvzf WRF-4.3.3.tar.gz -C $HOME/WRF/WRFDA
+cd $HOME/WRF/WRFDA/WRF-4.3.3
 mv * $HOME/WRF/WRFDA
 cd $HOME/WRF/WRFDA
-rm -r WRF-4.3/
+rm -r WRF-4.3.3/
 export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
 export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
-./configure 4dvar 
+./configure 4dvar #Option 12 for gfortran/gcc and distribunted memory 
 ./compile all_wrfvar
-
-
 
 
 ######################## WPS Domain Setup Tools ########################
