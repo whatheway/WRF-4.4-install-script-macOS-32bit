@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: WRFCHEM 4.3.3 Install Script macOS 32bit
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Will
+    family-names: Hatheway
+identifiers:
+  - type: url
+    value: >-
+      https://github.com/whatheway/WRFC-4.3.3-install-script-macOS-32bit
+version: 4.3.3
+date-released: '2022-04-27'
