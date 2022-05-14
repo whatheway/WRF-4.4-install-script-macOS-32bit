@@ -58,3 +58,5 @@ If newer libraries exist edit script paths for changes
 
 # Estimated Run Time ~ 80 - 150 Minutes
 ### Special thanks to  Youtube's meteoadriatic and GitHub user jamal919 and Gordon S.
+
+Hatheway, W. (2022). WRF 4.3.3 Install Script macOS 32bit (Version 4.3.3) [Computer software]
