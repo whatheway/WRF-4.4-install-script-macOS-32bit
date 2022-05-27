@@ -4,19 +4,20 @@
 # Download and install required library and data files for WRF.
 # Tested in macOS Catalina 10.15.7
 # Tested in 32-bit
-# Tested with current available libraries on 04/25/2022
+# Tested with current available libraries on 05/11/2022
 # If newer libraries exist edit script paths for changes
-#Estimated Run Time ~ 80 - 150 Minutes with 10mb/s downloadspeed.
+#Estimated Run Time ~ 90 - 150 Minutes with 10mb/s downloadspeed.
 #Special thanks to  Youtube's meteoadriatic and GitHub user jamal919
 
 #############################basic package managment############################
 
 
-brew install gcc libtool automake autoconf make m4 java ksh git ncview ncar-ncl wget mpich grads
+brew install gcc libtool automake autoconf make m4 java ksh git wget mpich grads ksh tcsh python@3.9
 
 ##############################Directory Listing############################
 
 export HOME=`cd;pwd`
+export DIR=$HOME/WRF/Libs
 mkdir $HOME/WRF
 cd $HOME/WRF
 mkdir Downloads
@@ -30,10 +31,9 @@ mkdir Libs/NETCDF
 ##############################Downloading Libraries############################
 
 cd Downloads
-wget -c https://github.com/madler/zlib/archive/refs/tags/v1.2.11.tar.gz
-wget -c https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_13_1.tar.gz
+wget -c https://github.com/madler/zlib/archive/refs/tags/v1.2.12.tar.gz
+wget -c https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_12_2.tar.gz
 wget -c https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.8.1.tar.gz
-wget -c https://github.com/Unidata/netcdf-fortran/archive/refs/tags/v4.5.4.tar.gz
 wget -c https://download.sourceforge.net/libpng/libpng-1.6.37.tar.gz
 wget -c https://www.ece.uvic.ca/~frodo/jasper/software/jasper-1.900.1.zip
 
@@ -42,20 +42,20 @@ wget -c https://www.ece.uvic.ca/~frodo/jasper/software/jasper-1.900.1.zip
 
 #############################Compilers############################
 
-export DIR=$HOME/WRF/Libs
+
 export CC=gcc
 export CXX=g++
 export FC=gfortran
 export F77=gfortran
 
 #############################zlib############################
-##### Utilizing Zlib 1.2.11 instead of Zlib 1.2.12  #########
-##### due to bugs in new zlib package that needs to #########
-##### be fixed.  Will update once patched           #########
+#Uncalling compilers due to comfigure issue with zlib1.2.12
+#With CC & CXX definied ./configure uses different compiler Flags
+
 cd $HOME/WRF/Downloads
-tar -xvzf v1.2.11.tar.gz
-cd zlib-1.2.11/
-./configure --prefix=$DIR/grib2
+tar -xvzf v1.2.12.tar.gz
+cd zlib-1.2.12/
+CC= CXX= ./configure --prefix=$DIR/grib2
 make
 make install
 make check
@@ -70,7 +70,6 @@ cd libpng-1.6.37/
 make
 make install
 make check
-
 
 #############################JasPer############################
 
@@ -88,8 +87,8 @@ export JASPERINC=$DIR/grib2/include
 #############################hdf5 library for netcdf4 functionality############################
 
 cd $HOME/WRF/Downloads
-tar -xvzf hdf5-1_13_1.tar.gz
-cd hdf5-hdf5-1_13_1
+tar -xvzf hdf5-1_12_2.tar.gz
+cd hdf5-hdf5-1_12_2
 ./configure --prefix=$DIR/grib2 --with-zlib=$DIR/grib2 --enable-hl --enable-fortran
 make 
 make install
@@ -125,53 +124,110 @@ make
 make install
 make check
 
-############################ WRF 4.3.3 #################################
-## WRF v4.3.3
+
+
+######################## ARWpost V3.1  ############################
+## ARWpost
+##Configure #3
+###################################################################
+cd $HOME/WRF/Downloads
+wget -c http://www2.mmm.ucar.edu/wrf/src/ARWpost_V3.tar.gz
+tar -xvzf ARWpost_V3.tar.gz -C $HOME/WRF
+cd $HOME/WRF/ARWpost
+./clean -a
+sed -i -e 's/-lnetcdf/-lnetcdff -lnetcdf/g' $HOME/WRF/ARWpost/src/Makefile
+export NETCDF=$DIR/NETCDF
+./configure  
+sed -i -e 's/-C -P -traditional/-P -traditional/g' $HOME/WRF/ARWpost/configure.arwp
+./compile
+
+
+export PATH=$HOME/WRF/ARWpost/ARWpost.exe:$PATH
+
+
+
+##################### NCAR COMMAND LANGUAGE           ##################
+########### NCL compiled via Conda                    ##################
+########### This is the preferred method by NCAR      ##################
+########### https://www.ncl.ucar.edu/index.shtml      ##################
+
+#Installing Miniconda3 to WRF directory and updating libraries
+source $HOME/WRF-4.4-install-script-macOS/Miniconda3_WRF_Install.sh
+
+#Installing NCL via Conda
+source $Miniconda_Install_DIR/etc/profile.d/conda.sh
+conda init bash
+conda activate base
+conda create -n ncl_stable -c conda-forge ncl -y
+conda activate ncl_stable
+conda update -n ncl_stable --all -y
+conda deactivate 
+conda deactivate
+
+##################### WRF Python           ##################
+########### WRf-Python compiled via Conda  ##################
+########### This is the preferred method by NCAR      ##################
+##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
+source $Miniconda_Install_DIR/etc/profile.d/conda.sh
+conda init bash
+conda activate base
+conda create -n wrf-python -c conda-forge wrf-python -y
+conda activate wrf-python
+conda update -n wrf-python --all -y
+conda deactivate
+conda deactivate
+
+
+
+############################ WRF 4.4  #################################
+## WRF v4.4
 ## Downloaded from git tagged releases
-# option 21, option 1 for gfortran/clang and distributed memory w/basic nesting
+# option 34, option 1 for gfortran and distributed memory w/basic nesting
+# large file support enable with WRFiO_NCD_LARGE_FILE_SUPPORT=1
 ########################################################################
 
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
 cd $HOME/WRF/Downloads
-wget -c https://github.com/wrf-model/WRF/archive/v4.3.3.tar.gz -O WRF-4.3.3.tar.gz
-tar -xvzf WRF-4.3.3.tar.gz -C $HOME/WRF
-cd $HOME/WRF/WRF-4.3.3
+wget -c https://github.com/wrf-model/WRF/releases/download/v4.4/v4.4.tar.gz -O WRF-4.4.tar.gz
+tar -xvzf WRF-4.4.tar.gz -C $HOME/WRF
+cd $HOME/WRF/WRFV4.4
 ./clean
 ./configure # option 21, option 1 for gfortran/clang and distributed memory w/basic nesting
 ./compile em_real
 
-export WRF_DIR=$HOME/WRF/WRF-4.3.3
+export WRF_DIR=$HOME/WRF/WRFV4.4
 
 
-############################WPSV4.3#####################################
-## WPS v4.3.1
+############################WPSV4.4#####################################
+## WPS v4.4
 ## Downloaded from git tagged releases
 #Option 3 for gfortran and distributed memory 
 ########################################################################
 
 cd $HOME/WRF/Downloads
-wget -c https://github.com/wrf-model/WPS/archive/refs/tags/v4.3.1.tar.gz -O WPS-4.3.1.tar.gz
-tar -xvzf WPS-4.3.1.tar.gz -C $HOME/WRF
-cd $HOME/WRF/WPS-4.3.1
+wget -c https://github.com/wrf-model/WPS/archive/refs/tags/v4.4.tar.gz -O WPS-4.4.tar.gz
+tar -xvzf WPS-4.4.tar.gz -C $HOME/WRF
+cd $HOME/WRF/WPS-4.4
+./clean -a
 ./configure #Option 3 for gfortran and distributed memory 
 ./compile
 
 
 ############################WRFPLUS 4DVAR###############################
-## WRFPLUS v4.3.3 4DVAR
+## WRFPLUS v4.4 4DVAR
 ## Downloaded from git tagged releases
 ## WRFPLUS is built within the WRF git folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
-##Note: if you intend to run both 3DVAR and 4DVAR experiments, it is not necessary to compile the code twice.
-#Option 12 for gfortran/clang and distribunted memory
+##Note: if you intend to run both 3DVAR and 4DVAR experiments, it is not necessary to compile the code twice. 
+#Option 12 for gfortran/gcc and distribunted memory 
 ########################################################################
 
 cd $HOME/WRF/Downloads
-tar -xvzf WRF-4.3.3.tar.gz -C $HOME/WRF/WRFPLUS
-cd $HOME/WRF/WRFPLUS/WRF-4.3.3
+tar -xvzf WRF-4.4.tar.gz -C $HOME/WRF/WRFPLUS
+cd $HOME/WRF/WRFPLUS/WRF-4.4
 mv * $HOME/WRF/WRFPLUS
 cd $HOME/WRF/WRFPLUS
-rm -r WRF-4.3.3/
+rm -r WRFV4.4/
 export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
@@ -183,26 +239,61 @@ export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 
 
 ############################WRFDA 4DVAR###############################
-## WRFDA v4.3.3 4DVAR
+## WRFDA v4.4 4DVAR
 ## Downloaded from git tagged releases
 ## WRFDA is built within the WRFPLUS folder
 ## Does not include RTTOV Libarary for radiation data.  If wanted will need to install library then reconfigure
-##Note: if you intend to run both 3DVAR and 4DVAR experiments, it is not necessary to compile the code twice.
+##Note: if you intend to run both 3DVAR and 4DVAR experiments, it is not necessary to compile the code twice. 
 #Option 12 for gfortran/clang and distribunted memory
 ########################################################################
 
 cd $HOME/WRF/Downloads
-tar -xvzf WRF-4.3.3.tar.gz -C $HOME/WRF/WRFDA
-cd $HOME/WRF/WRFDA/WRF-4.3.3
+tar -xvzf WRF-4.4.tar.gz -C $HOME/WRF/WRFDA
+cd $HOME/WRF/WRFDA/WRF-4.4
 mv * $HOME/WRF/WRFDA
 cd $HOME/WRF/WRFDA
-rm -r WRF-4.3.3/
+rm -r WRFV4.4/
 export NETCDF=$DIR/NETCDF
 export HDF5=$DIR/grib2
 export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
 export WRFPLUS_DIR=$HOME/WRF/WRFPLUS
 ./configure 4dvar #Option 12 for gfortran/gcc and distribunted memory 
 ./compile all_wrfvar
+
+
+
+
+############################OBSGRID###############################
+## OBSGRID
+## Downloaded from git tagged releases
+## Option #2
+########################################################################
+cd $HOME/WRF/
+git clone https://github.com/wrf-model/OBSGRID.git
+cd $HOME/WRF/OBSGRID
+
+./clean -a
+source $Miniconda_Install_DIR/etc/profile.d/conda.sh
+conda init bash
+conda activate ncl_stable
+
+
+export HOME=`cd;pwd`
+export DIR=$HOME/WRF/Libs
+export NETCDF=$DIR/NETCDF
+
+./configure   #Option 2
+
+sed -i 's/-C -P -traditional/-P -traditional/g' configure.oa
+sed -i 's/-lnetcdf -lnetcdff/ -lnetcdff -lnetcdf/g' configure.oa
+sed -i 's/-lncarg -lncarg_gks -lncarg_c -lX11 -lm -lcairo/-lncarg -lncarg_gks -lncarg_c -lX11 -lm -lcairo -lfontconfig -lpixman-1 -lfreetype -lhdf5 -lhdf5_hl /g' configure.oa
+
+
+./compile
+
+conda deactivate
+conda deactivate
+
 
 
 ######################## WPS Domain Setup Tools ########################
@@ -223,38 +314,94 @@ mkdir $HOME/WRF/WRFPortal
 unzip wrf-portal.zip -d $HOME/WRF/WRFPortal
 chmod +x $HOME/WRF/WRFPortal/runWRFPortal
 
+
+
+
+
 ######################## Static Geography Data inc/ Optional ####################
 # http://www2.mmm.ucar.edu/wrf/users/download/get_sources_wps_geog.html
-# Double check if Irrigation.tar.gz extracted into WPS_GEOG folder
-# IF it didn't right click on the .tar.gz file and select 'extract here'
+# These files are large so if you only need certain ones comment the others off
+# All files downloaded and untarred is 200GB
+# https://www2.mmm.ucar.edu/wrf/users/download/get_sources_wps_geog.html
 #################################################################################
-
 cd $HOME/WRF/Downloads
-wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_high_res_mandatory.tar.gz
 mkdir $HOME/WRF/GEOG
-tar -xvzf geog_high_res_mandatory.tar.gz -C $HOME/WRF/GEOG
-wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_thompson28_chem.tar.gz
+mkdir $HOME/WRF/GEOG/WPS_GEOG
+
+#Mandatory WRF Preprocessing System (WPS) Geographical Input Data Mandatory Fields Downloads
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_high_res_mandatory.tar.gz
+tar -xvzf geog_high_res_mandatory.tar.gz -C $HOME/WRF/GEOG/
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_low_res_mandatory.tar.gz
+tar -xvzf geog_low_res_mandatory.tar.gz -C $HOME/WRF/GEOG/
+mv $HOME/WRF/GEOG/WPS_GEOG_LOW_RES/ $HOME/WRF/GEOG/WPS_GEOG
+
+
+# WPS Geographical Input Data Mandatory for Specific Applications
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_thompson28_chem.tar.gz
 tar -xvzf geog_thompson28_chem.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
-wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_noahmp.tar.gz
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_noahmp.tar.gz
 tar -xvzf geog_noahmp.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
+
 wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/irrigation.tar.gz
 tar -xvzf irrigation.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
-wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_px.tar.gz
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_px.tar.gz
 tar -xvzf geog_px.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
-wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_urban.tar.gz
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_urban.tar.gz
 tar -xvzf geog_urban.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
-wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_ssib.tar.gz
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_ssib.tar.gz
 tar -xvzf geog_ssib.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
-wget -c  https://www2.mmm.ucar.edu/wrf/src/wps_files/lake_depth.tar.bz2
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/lake_depth.tar.bz2
 tar -xvf lake_depth.tar.bz2 -C $HOME/WRF/GEOG/WPS_GEOG
 
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/topobath_30s.tar.bz2                                                
+tar -xvf topobath_30s.tar.bz2 -C $HOME/WRF/GEOG/WPS_GEOG
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/gsl_gwd.tar.gz
+tar -xvzf gsl_gwd.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
 
 
-## export PATH and LD_LIBRARY_PATH
+#Optional WPS Geographical Input Data 
+
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_older_than_2000.tar.gz
+tar -xvzf geog_old_than_2000.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/modis_landuse_20class_15s_with_lakes.tar.gz
+tar -xvzf modis_landuse_20class_15s_with_lakes.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_alt_lsm.tar.gz
+tar -xvzf geog_alt_lsm.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/nlcd2006_ll_9s.tar.bz2
+tar -xvf nlcd2006_ll_9s.tar.bz2 -C $HOME/WRF/GEOG/WPS_GEOG
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/updated_Iceland_LU.tar.gz
+tar -xvf updated_Iceland_LU.tar.gz -C $HOME/WRF/GEOG/WPS_GEOG
+
+wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/modis_landuse_20class_15s.tar.bz2
+tar -xvf modis_landuse_20class_15s.tar.bz2 -C $HOME/WRF/GEOG/WPS_GEOG
+
+
+
+
+
+
+##########################  Export PATH and LD_LIBRARY_PATH ################################
+cd $HOME
+
 echo "export PATH=$DIR/bin:$PATH" >> ~/.bashrc
 echo "export LD_LIBRARY_PATH=$DIR/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
 
 
+
+
 #####################################BASH Script Finished##############################
-echo "Congratulations! You've successfully installed all required files to run the Weather Research Forecast Model verison 4.3."
-echo "Thank you for using this script"
+echo "Congratulations! You've successfully installed all required files to run the Weather Research Forecast Model verison 4.4."
+echo "Thank you for using this script" 
