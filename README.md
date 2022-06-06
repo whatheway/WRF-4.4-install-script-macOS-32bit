@@ -39,7 +39,7 @@ Script assumes a clean directory with no other WRF configure files in the direct
 
 > chmod 775 Install_MAC_WRF.sh
 
-> chmod 775 Minicoda3_Install.sh
+> chmod 775 Minicoda3_WRF_Install.sh
 
 > ./Install_MAC_WRF.sh
 
